@@ -4,6 +4,7 @@ import torch
 import torch.nn as nn
 import numpy as np
 from PIL import Image
+import matplotlib.pyplot as plt
 
 from unet_segmentation import UNet
 from dataset import CelebAMaskHQDataset
@@ -58,20 +59,22 @@ def main():
     model = UNet(num_classes=10).to(device)
     optimizer = torch.optim.Adam(model.parameters(), lr=1e-3)
     criterion = nn.CrossEntropyLoss()
+    loss_history = []
 
-    for epoch in range(101):
+    for epoch in range(201):
         for img, mask in loader:
             img = img.to(device)
             mask = mask.to(device)
 
             logits = model(img)
             loss = criterion(logits, mask)
+            loss_history.append(loss.item())
 
             optimizer.zero_grad()
             loss.backward()
             optimizer.step()
 
-        if epoch % 10 == 0:
+        if epoch % 20 == 0:
             model.eval()
             with torch.no_grad():
                 # берём ПЕРВЫЙ элемент последнего батча
@@ -89,6 +92,15 @@ def main():
 
         print(f"Epoch {epoch} | Loss {loss.item():.4f}")
         torch.save(model.state_dict(), "checkpoints/segmentation.pth")
-
+    
+    plt.figure(figsize=(6,4))
+    plt.plot(loss_history)
+    plt.title("Segmentation training loss")
+    plt.xlabel("Iteration")
+    plt.ylabel("Loss")
+    plt.grid(True)
+    plt.tight_layout()
+    plt.savefig("segmentation_loss.png")
+    plt.close()
 if __name__ =="__main__":
     main()

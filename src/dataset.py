@@ -49,7 +49,7 @@ CLASS_PRIORITY = [
 ]
 
 class CelebAMaskHQDataset(Dataset):
-    def __init__(self, image_dir, mask_root, max_samples=500):
+    def __init__(self, image_dir, mask_root, max_samples=300):
         self.image_dir = image_dir
         self.mask_root = mask_root
 

@@ -68,7 +68,7 @@ morph_tagger = NewsMorphTagger(emb)
 # --------------------
 # НАСТРОЙКИ
 # --------------------
-IMAGE_PATH = "demo_images/artur_standart.jpg"
+IMAGE_PATH = "demo_images/1.jpg"
 TEXT = "Сделай лицо с черными волосами и глазами"
 OUTPUT_PATH = "result.png"
 
@@ -139,7 +139,6 @@ with torch.no_grad():
     mask_oh = torch.nn.functional.one_hot(
         mask_idx, num_classes=NUM_CLASSES
     ).permute(0, 3, 1, 2).float()
-
     # 2. Текст
     text_vec = txt([prompt]).to(device)
     # 3. Генерация
@@ -148,9 +147,11 @@ with torch.no_grad():
 # --------------------
 # СОХРАНЕНИЕ РЕЗУЛЬТАТА
 # --------------------
+
 output = output.squeeze(0).cpu()
 output = (output + 1) / 2
 output = transforms.ToPILImage()(output)
 output.save(OUTPUT_PATH)
+
 
 print("Готово! Результат сохранён в", OUTPUT_PATH)

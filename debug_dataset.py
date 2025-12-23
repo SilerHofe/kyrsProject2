@@ -4,10 +4,10 @@ from src.dataset import CelebAMaskHQDataset
 ds = CelebAMaskHQDataset(
     "data/CelebA-HQ-img",
     "data/CelebAMask-HQ-mask-anno",
-    max_samples=1
+    max_samples=165
 )
 
-img, mask = ds[0]
+img, mask = ds[164]
 
 plt.figure(figsize=(8,4))
 
